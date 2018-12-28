@@ -16,17 +16,6 @@
 #define MAP_X 30
 #define MAP_Y 20
 
-int x[100], y[100];
-int food_x, food_y;
-int length;
-int speed;
-int score;
-int best_score = 0;
-int last_score = 0;
-int dir;
-int key;
-int status_on = 0;
-
 void gotoxy(int x, int y, char* s)
 {
     COORD pos = {2*x, y};
@@ -35,6 +24,7 @@ void gotoxy(int x, int y, char* s)
 }
 
 typedef enum {NOCURSOR, SOLIDCURSOR, NORMALCURSOR} CURSOR_TYPE;
+
 void setcursortype(CURSOR_TYPE c)
 {
      CONSOLE_CURSOR_INFO CurInfo;
@@ -55,8 +45,7 @@ void setcursortype(CURSOR_TYPE c)
      }
 
      SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&CurInfo);
-} 
-
+}
 
 void title(void);
 void reset(void);
@@ -66,6 +55,17 @@ void pause(void);
 void game_over(void);
 void food(void);
 void status(void);
+
+int x[100], y[100];
+int food_x, food_y;
+int length;
+int speed;
+int score;
+int best_score = 0;
+int last_score = 0;
+int dir;
+int key;
+int status_on = 0;
 
 int main()
 {
@@ -188,7 +188,7 @@ void move(int dir)
 
     if(x[0] == food_x && y[0] == food_y)
     {
-        score+=10;
+        score += 10;
         food();
         length++;
         x[length - 1] = x[length - 2];
