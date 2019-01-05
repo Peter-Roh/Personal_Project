@@ -16,6 +16,27 @@
 #define MAP_X 30
 #define MAP_Y 20
 
+void title(void);
+void reset(void);
+void draw_map(void);
+void move(int dir);
+void pause(void);
+void game_over(void);
+void food(void);
+void status(void);
+
+int x[100], y[100];
+int food_x, food_y;
+int length;
+int speed;
+int level;
+int score;
+int best_score = 0;
+int last_score = 0;
+int dir;
+int key;
+int status_on = 0;
+
 void gotoxy(int x, int y, char* s)
 {
     COORD pos = {2*x, y};
@@ -45,63 +66,6 @@ void setcursortype(CURSOR_TYPE c)
      }
 
      SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&CurInfo);
-}
-
-void title(void);
-void reset(void);
-void draw_map(void);
-void move(int dir);
-void pause(void);
-void game_over(void);
-void food(void);
-void status(void);
-
-int x[100], y[100];
-int food_x, food_y;
-int length;
-int speed;
-int score;
-int best_score = 0;
-int last_score = 0;
-int dir;
-int key;
-int status_on = 0;
-
-int main()
-{
-    setcursortype(NOCURSOR);
-    title();
-
-    while(1)
-    {
-        if(kbhit()) do{key = getch();} while(key == 224);
-        Sleep(speed);
-
-        switch(key)
-        {
-            case LEFT:
-            case RIGHT:
-            case UP:
-            case DOWN:
-                if((dir == LEFT && key != RIGHT) || (dir == RIGHT && key != LEFT) || (dir == UP && key != DOWN) || (dir == DOWN && key != UP))
-                    dir = key;
-                key = 0;
-            break;
-            case PAUSE:
-                pause();
-            break;
-            case 115:
-                if(status_on == 0) status_on = 1;
-                else status_on = 0;
-                key = 0;
-                break;
-            case ESC:
-                exit(0);
-        }
-        move(dir);
-
-        if(status_on == 1) status();
-    }
 }
 
 void title(void)
@@ -180,6 +144,9 @@ void draw_map(void)
     {
         gotoxy(MAP_ADJ_X + i, MAP_ADJ_Y + MAP_Y - 1, "■");
     }
+
+    gotoxy(MAP_ADJ_X + (MAP_X), MAP_ADJ_Y + 5, " LEVEL : ");
+    gotoxy(MAP_ADJ_X + (MAP_X), MAP_ADJ_Y + 6, " GOAL  : ");
 }
 
 void move(int dir)
@@ -318,4 +285,41 @@ void status(void)
     printf("%3d", speed);
     gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 6, "score= ");
     printf("%3d", score);
+}
+
+int main()
+{
+    setcursortype(NOCURSOR);
+    title();
+
+    while(1)
+    {
+        if(kbhit()) do{key = getch();} while(key == 224);
+        Sleep(speed);
+
+        switch(key)
+        {
+            case LEFT:
+            case RIGHT:
+            case UP:
+            case DOWN:
+                if((dir == LEFT && key != RIGHT) || (dir == RIGHT && key != LEFT) || (dir == UP && key != DOWN) || (dir == DOWN && key != UP))
+                    dir = key;
+                key = 0;
+            break;
+            case PAUSE:
+                pause();
+            break;
+            case 115:
+                if(status_on == 0) status_on = 1;
+                else status_on = 0;
+                key = 0;
+                break;
+            case ESC:
+                exit(0);
+        }
+        move(dir);
+
+        if(status_on == 1) status();
+    }
 }
