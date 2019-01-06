@@ -17,6 +17,9 @@ These files were created while I was studying programming.
 
 <img src = "https://user-images.githubusercontent.com/36218264/41275190-0df6ab38-6e5b-11e8-97bb-f6d6eba19d87.PNG">
 <img src = "https://user-images.githubusercontent.com/36218264/41275195-103ec696-6e5b-11e8-89cb-6f53d48ae208.PNG">
+<img src = "https://user-images.githubusercontent.com/36218264/50733910-631e0d00-11d9-11e9-9177-9b7cdbb71888.PNG">
+
+updated 2019.01.06 : level & speed, item(shorten the length of snake)
 
 # Calculator
 
