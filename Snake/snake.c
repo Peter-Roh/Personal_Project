@@ -10,9 +10,6 @@
 #define DOWN 80
 #define PAUSE 112
 #define ESC 27
-
-#define MAP_ADJ_X 3
-#define MAP_ADJ_Y 2
 #define MAP_X 30
 #define MAP_Y 20
 
@@ -25,20 +22,21 @@ void game_over(void);
 void food(void);
 void check_food(void);
 void check_level_up(void);
-void status(void);
+void item(void);
 
 int x[100], y[100];
 int food_x, food_y;
+int item_x, item_y;
 int length;
 int speed;
 int level = 1;
 int score;
 int cnt = 0;
+int cnt2 = 0;
 int best_score = 0;
 int last_score = 0;
 int dir;
 int key;
-int status_on = 0;
 int level_up_on = 0;
 
 void gotoxy(int x, int y, char* s)
@@ -79,20 +77,20 @@ void title(void)
     while (kbhit()) getch();
 
     draw_map();
-    for(i = MAP_ADJ_Y + 1; i < MAP_ADJ_Y + MAP_Y - 1; i++)
+    for(i = 3; i < MAP_Y + 1; i++)
     {
-        for(j = MAP_ADJ_X + 1; j < MAP_ADJ_X + MAP_X - 1; j++) gotoxy(j,i,"  ");
+        for(j = 4; j < MAP_X + 2; j++) gotoxy(j,i,"  ");
     }
 
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 5, "+--------------------------+");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 6, "|        S N A K E         |");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 7, "+--------------------------+");
+    gotoxy((MAP_X/2) - 4, 7, "+--------------------------+");
+    gotoxy((MAP_X/2) - 4, 8, "|        S N A K E         |");
+    gotoxy((MAP_X/2) - 4, 9, "+--------------------------+");
 
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 9, " < PRESS ANY KEY TO START > ");
+    gotoxy((MAP_X/2) - 4, 11, " < PRESS ANY KEY TO START > ");
 
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 11, "   ◇ ←,→,↑,↓ : Move    ");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 12, "   ◇ P : Pause             ");  
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 13, "   ◇ ESC : Quit              ");
+    gotoxy((MAP_X/2) - 4, 13, "   ◇ ←,→,↑,↓ : Move    ");
+    gotoxy((MAP_X/2) - 4, 14, "   ◇ P : Pause             ");  
+    gotoxy((MAP_X/2) - 4, 15, "   ◇ ESC : Quit              ");
 
     while(1)
     {
@@ -103,9 +101,9 @@ void title(void)
             else break;
         }
 
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 9, " < PRESS ANY KEY TO START > ");
+        gotoxy((MAP_X/2) - 4, 11, " < PRESS ANY KEY TO START > ");
         Sleep(400);
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 9, "                            ");
+        gotoxy((MAP_X/2) - 4, 11, "                            ");
         Sleep(400);
     }
     reset();
@@ -125,13 +123,14 @@ void reset(void)
     level = 1;
     level_up_on = 0;
     cnt = -1;
+    cnt2 = 0;
     for(i = 0; i < length; i++)
     {
         x[i] = MAP_X / 2 + i;
         y[i] = MAP_Y / 2;
-        gotoxy(MAP_ADJ_X + x[i], MAP_ADJ_Y + y[i], "ㅇ");
+        gotoxy(x[i] + 3, y[i] + 2, "ㅇ");
     }
-    gotoxy(MAP_ADJ_X + x[0], MAP_ADJ_Y + y[0],"◇");
+    gotoxy(x[0] + 3, y[0] + 2,"◇");
     food();
 }
 
@@ -140,16 +139,16 @@ void draw_map(void)
     int i, j;
     for(i = 0; i < MAP_X; i++)
     {
-        gotoxy(MAP_ADJ_X + i, MAP_ADJ_Y, "■");
+        gotoxy(i + 3, 2, "■");
     }
-    for(i = MAP_ADJ_Y + 1; i < MAP_ADJ_Y + MAP_Y - 1; i++)
+    for(i = 3; i < MAP_Y + 1; i++)
     {
-        gotoxy(MAP_ADJ_X, i, "■");
-        gotoxy(MAP_ADJ_X + MAP_X - 1, i, "■");
+        gotoxy(3, i, "■");
+        gotoxy(MAP_X + 2, i, "■");
     }
     for(i = 0; i < MAP_X; i++)
     {
-        gotoxy(MAP_ADJ_X + i, MAP_ADJ_Y + MAP_Y - 1, "■");
+        gotoxy(i + 3, MAP_Y + 1, "■");
     }
 }
 
@@ -161,9 +160,23 @@ void move(int dir)
     {
         score += 10;
         food();
+
         length++;
         x[length - 1] = x[length - 2];
         y[length - 1] = y[length - 2];
+
+        if(cnt2 == 3)
+        {
+            item();
+        }
+    }
+    if(x[0] == item_x && y[0] == item_y)
+    {
+        gotoxy(x[length - 1] + 3, y[length - 1] + 2, "  ");
+        gotoxy(x[length - 2] + 3, y[length - 2] + 2, "  ");
+        gotoxy(x[length - 3] + 3, y[length - 3] + 2, "  ");
+
+        length -= 3;
     }
     if(x[0] == 0 || x[0] == MAP_X - 1 || y[0] == 0 || y[0] == MAP_Y - 1)
     {
@@ -179,18 +192,18 @@ void move(int dir)
         }
     }
 
-    gotoxy(MAP_ADJ_X + x[length - 1], MAP_ADJ_Y + y[length - 1], "  ");
+    gotoxy(x[length - 1] + 3, y[length - 1] + 2, "  ");
     for(i = length - 1; i > 0; i--)
     {
         x[i] = x[i - 1];
         y[i] = y[i - 1];
     }
-    gotoxy(MAP_ADJ_X + x[0], MAP_ADJ_Y + y[0], "ㅇ");
+    gotoxy(x[0] + 3, y[0] + 2, "ㅇ");
     if(dir == LEFT) --x[0];
     if(dir == RIGHT) ++x[0];
     if(dir == UP) --y[0];
     if(dir == DOWN) ++y[0];
-    gotoxy(MAP_ADJ_X + x[i], MAP_ADJ_Y + y[i], "◇");
+    gotoxy(x[i] + 3, y[i] + 2, "◇");
 }
 
 void pause(void)
@@ -199,9 +212,9 @@ void pause(void)
     {
         if(key == PAUSE)
         {
-            gotoxy(MAP_ADJ_X + (MAP_X/2) - 9, MAP_ADJ_Y, "< PAUSE : PRESS ANY KEY TO RESUME > ");
+            gotoxy((MAP_X/2) - 6, 2, "< PAUSE : PRESS ANY KEY TO RESUME > ");
             Sleep(400);
-            gotoxy(MAP_ADJ_X + (MAP_X/2) - 9, MAP_ADJ_Y,"                                    ");
+            gotoxy((MAP_X/2) - 6, 2,"                                    ");
             Sleep(400);
         }
         else
@@ -222,18 +235,18 @@ void pause(void)
 
 void game_over(void)
 {
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 5, "+----------------------+");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 6, "|      GAME OVER..     |");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 7, "+----------------------+");
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 8, " YOUR SCORE : ");
+    gotoxy((MAP_X/2) - 3, 7, "+----------------------+");
+    gotoxy((MAP_X/2) - 3, 8, "|      GAME OVER..     |");
+    gotoxy((MAP_X/2) - 3, 9, "+----------------------+");
+    gotoxy((MAP_X/2) - 3, 10, " YOUR SCORE : ");
     printf("%d", last_score = score);
 
-    gotoxy(MAP_ADJ_X + (MAP_X/2) - 7, MAP_ADJ_Y + 12, " Press any keys to restart.. ");
+    gotoxy((MAP_X/2) - 4, 14, " Press any keys to restart.. ");
 
     if(score > best_score)
     {
         best_score = score;
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 4, MAP_ADJ_Y + 10, "☆ BEST SCORE ☆");
+        gotoxy((MAP_X/2) - 1, 12, "☆ BEST SCORE ☆");
     }
     Sleep(500);
         while (kbhit()) getch();
@@ -244,10 +257,10 @@ void game_over(void)
 void food(void)
 {
     int i;
-
     int food_crush_on = 0;
     int r = 0;
-    gotoxy(MAP_ADJ_X, MAP_ADJ_Y + MAP_Y, " YOUR SCORE: ");
+
+    gotoxy(3, MAP_Y + 2, " YOUR SCORE: ");
     printf("%3d, LAST SCORE: %3d, BEST SCORE: %3d", score, last_score, best_score);
 
     while(1)
@@ -269,9 +282,47 @@ void food(void)
 
         if(food_crush_on == 1) continue;
 
-        gotoxy(MAP_ADJ_X + food_x, MAP_ADJ_Y + food_y, "☆");
+        gotoxy(food_x + 3, food_y + 2, "☆");
         cnt++;
+        cnt2++;
         check_food();
+        break;
+    }
+}
+
+void item(void)
+{
+    int i;
+    int item_crush_on = 0;
+    int r = 0;
+
+    while(1)
+    {
+        item_crush_on = 0;
+        srand((unsigned)time(NULL) + r);
+        item_x = (rand() % (MAP_X - 2)) + 1;
+        item_y = (rand() % (MAP_X - 2)) + 1;
+
+        for(i = 0; i < length; i++)
+        {
+            if(item_x == x[i] && item_y == y[i])
+            {
+                item_crush_on = 1;
+                r++;
+                break;
+            }
+            if(food_x == item_x && food_y == item_y)
+            {
+                item_crush_on = 1;
+                r++;
+                break;
+            }
+        }
+
+        if(item_crush_on == 1) continue;
+
+        gotoxy(item_x + 3, item_y + 2, "♡");
+        cnt2 = 0;
         break;
     }
 }
@@ -287,31 +338,31 @@ void check_food(void)
     switch(level)
     {
         case 2:
-            speed -= 5;
+            speed -= 4;
             break;
         case 3:
-            speed -= 5;
+            speed -= 4;
             break;
         case 4:
-            speed -= 5;
+            speed -= 4;
             break;
         case 5:
-            speed -= 5;
+            speed -= 3;
             break;
         case 6:
-            speed -= 5;
+            speed -= 3;
             break;
         case 7:
-            speed -= 5;
+            speed -= 3;
             break;
         case 8:
-            speed -= 5;
+            speed -= 2;
             break;
         case 9:
-            speed -= 5;
+            speed -= 2;
             break;
         case 10:
-            speed -= 5;
+            speed -= 2;
             break;
     }
 }
@@ -320,31 +371,14 @@ void check_level_up(void)
 {
     if(level_up_on == 1)
     {
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 6, "☆LEVEL UP!☆");
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 7, "☆SPEED UP!☆");
-        Sleep(200);
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 6, "            ");
-        gotoxy(MAP_ADJ_X + (MAP_X/2) - 6, MAP_ADJ_Y + 7, "            ");
-
+        gotoxy((MAP_X) + 8, 7, "☆LEVEL UP!☆");
+        gotoxy((MAP_X) + 8, 8, "☆SPEED UP!☆");
+        Sleep(350);
+        gotoxy((MAP_X) + 8, 7, "            ");
+        gotoxy((MAP_X) + 8, 8, "            ");
     }
 
     level_up_on = 0;
-}
-
-void status(void)
-{
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y, "head= ");
-    printf("%2d, %2d", x[0], y[0]);
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 1, "food= ");
-    printf("%2d, %2d", food_x, food_y);
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 2, "leng= ");
-    printf("%2d", length);
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 3, "key= ");
-    printf("%3d", key);
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 4, "spd= ");
-    printf("%3d", speed);
-    gotoxy(MAP_ADJ_X + MAP_X + 1, MAP_ADJ_Y + 6, "score= ");
-    printf("%3d", score);
 }
 
 int main()
@@ -370,19 +404,12 @@ int main()
             case PAUSE:
                 pause();
             break;
-            case 115:
-                if(status_on == 0) status_on = 1;
-                else status_on = 0;
-                key = 0;
-                break;
             case ESC:
                 exit(0);
         }
         move(dir);
-        gotoxy(MAP_ADJ_X + (MAP_X), MAP_ADJ_Y + 5, " LEVEL : "); printf("%d", level);
-        gotoxy(MAP_ADJ_X + (MAP_X), MAP_ADJ_Y + 6, " GOAL  : "); printf("%d", level * 5);
+        gotoxy(MAP_X + 3, 7, " LEVEL : "); printf("%d", level);
+        gotoxy(MAP_X + 3, 8, " GOAL  : "); printf("%d", level * 5);
         check_level_up();
-
-        if(status_on == 1) status();
     }
 }
