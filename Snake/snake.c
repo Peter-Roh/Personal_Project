@@ -165,10 +165,7 @@ void move(int dir)
         x[length - 1] = x[length - 2];
         y[length - 1] = y[length - 2];
 
-        if(cnt2 == 3)
-        {
-            item();
-        }
+        if(cnt2 == 3 && length > 3) item();
     }
     if(x[0] == item_x && y[0] == item_y)
     {
@@ -177,6 +174,7 @@ void move(int dir)
         gotoxy(x[length - 3] + 3, y[length - 3] + 2, "  ");
 
         length -= 3;
+        cnt2 = 0;
     }
     if(x[0] == 0 || x[0] == MAP_X - 1 || y[0] == 0 || y[0] == MAP_Y - 1)
     {
@@ -301,7 +299,7 @@ void item(void)
         item_crush_on = 0;
         srand((unsigned)time(NULL) + r);
         item_x = (rand() % (MAP_X - 2)) + 1;
-        item_y = (rand() % (MAP_X - 2)) + 1;
+        item_y = (rand() % (MAP_Y - 2)) + 1;
 
         for(i = 0; i < length; i++)
         {
@@ -322,7 +320,6 @@ void item(void)
         if(item_crush_on == 1) continue;
 
         gotoxy(item_x + 3, item_y + 2, "♡");
-        cnt2 = 0;
         break;
     }
 }
