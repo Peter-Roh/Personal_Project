@@ -70,7 +70,7 @@ void setcursortype(CURSOR_TYPE c)
      SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&CurInfo);
 }
 
-void title(void)
+void title(void)//첫 화면
 {
     int i, j;
 
@@ -109,7 +109,7 @@ void title(void)
     reset();
 }
 
-void reset(void)
+void reset(void)//초기화
 {
     int i;
     system("cls");
@@ -134,7 +134,7 @@ void reset(void)
     food();
 }
 
-void draw_map(void)
+void draw_map(void)//테두리 그리기
 {
     int i, j;
     for(i = 0; i < MAP_X; i++)
@@ -152,7 +152,7 @@ void draw_map(void)
     }
 }
 
-void move(int dir)
+void move(int dir)//뱀 머리 이동
 {
     int i;
 
@@ -165,7 +165,7 @@ void move(int dir)
         x[length - 1] = x[length - 2];
         y[length - 1] = y[length - 2];
 
-        if(cnt2 == 3 && length > 3) item();
+        if(cnt2 == 3 && length > 6) item();
     }
     if(x[0] == item_x && y[0] == item_y)
     {
@@ -204,7 +204,7 @@ void move(int dir)
     gotoxy(x[i] + 3, y[i] + 2, "◇");
 }
 
-void pause(void)
+void pause(void)//일시정지
 {
     while(1)
     {
@@ -231,7 +231,7 @@ void pause(void)
     }
 }
 
-void game_over(void)
+void game_over(void)//게임 오버
 {
     gotoxy((MAP_X/2) - 3, 7, "+----------------------+");
     gotoxy((MAP_X/2) - 3, 8, "|      GAME OVER..     |");
@@ -252,7 +252,7 @@ void game_over(void)
     title();
 }
 
-void food(void)
+void food(void)//먹이 생성
 {
     int i;
     int food_crush_on = 0;
@@ -288,7 +288,7 @@ void food(void)
     }
 }
 
-void item(void)
+void item(void)//뱀 길이 줄여주는 아이템
 {
     int i;
     int item_crush_on = 0;
@@ -324,7 +324,7 @@ void item(void)
     }
 }
 
-void check_food(void)
+void check_food(void)//속도 조절
 {
     if(cnt == level * 5)
     {
@@ -364,7 +364,7 @@ void check_food(void)
     }
 }
 
-void check_level_up(void)
+void check_level_up(void)//레벨 업 효과
 {
     if(level_up_on == 1)
     {
