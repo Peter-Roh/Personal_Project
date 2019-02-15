@@ -1,0 +1,20 @@
+body {
+    background-color: #ecf0f1;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 40px;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+h1{
+    color: #34495e;
+    transition: color 0.5s ease-in-out;
+}
+
+.clicked {
+    color: brown;
+}
