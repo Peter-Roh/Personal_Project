@@ -1,6 +1,14 @@
+body {
+  background-color: #ecf0f1;
+}
+
 .form,
 .greetings {
   display: none;
+}
+
+input:focus {
+  outline: none;
 }
 
 .showing {
