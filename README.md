@@ -6,7 +6,7 @@ These files were created while I was studying programming.
 
 # Tetris
 
-<img src= "https://user-images.githubusercontent.com/36218264/41274985-6004c050-6e5a-11e8-8bde-9a43bf899d08.PNG">
+<img src = "https://user-images.githubusercontent.com/36218264/41274985-6004c050-6e5a-11e8-8bde-9a43bf899d08.PNG">
 <img src = "https://user-images.githubusercontent.com/36218264/41274989-62339b44-6e5a-11e8-9bb7-92ca829b91ac.PNG">
 
 # 숫자 야구 (Bulls and cows)
@@ -28,3 +28,9 @@ updated 2019.01.06 : level & speed, item(shorten the length of snake)
 |Demo|+, -, *, /, ( ) |
 |Ver 1.1|^|
 |Ver 1.2|iteration|
+
+# Momentum
+
+<img src = "https://user-images.githubusercontent.com/36218264/53622515-5fd55980-3c3d-11e9-870b-a3356795e83e.png">
+
+studied vanilla JS by making Momentum
