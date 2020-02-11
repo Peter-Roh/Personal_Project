@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Random Walk</title>
+    <script>
+        function* randomWalk(ctx, x0, y0, d, color) {
+            let dx = [1, 0, -1, 0], dy = [0, 1, 0, -1];
+            let x = x0;
+            let y = y0;
+            ctx.strokeStyle = color;
+            ctx.lineCap = 'round';
+
+            while(true) {
+                yield;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                let dir = Math.floor(Math.random() * 4);
+                x += d * dx[dir];
+                y += d * dy[dir];
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        }
+        window.onload = function() {
+            let canvas = document.getElementById("mycanvas");
+            let ctx = canvas.getContext("2d");
+            let iter = randomWalk(ctx, 150, 50, 4, "#b71540");
+            setInterval(function() {iter.next();}, 10);
+        };
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html, body{
+            height: 100%;
+            width: 100%;
+        }
+        #container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #mycanvas {
+            background-color: #f6b93b;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            width: 600px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <canvas id="mycanvas"></canvas>
+    </div>
+</body>
+</html>
