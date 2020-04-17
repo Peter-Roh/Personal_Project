@@ -2,13 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-URL = "https://kr.indeed.com/%EC%B7%A8%EC%97%85?q=python&limit=50"
-URL_2 = "https://stackoverflow.com/jobs?q=python&sort=i"
-
 # indeed
 
-def extract_pages():
-    result = requests.get(URL)
+def extract_pages(url):
+    result = requests.get(url)
     soup = BeautifulSoup(result.text, 'html.parser')
     pagination = soup.find("div", {"class": "pagination"})
     links = pagination.find_all("a")
@@ -35,11 +32,11 @@ def extract_job(html):
     "link": f"https://kr.indeed.com/jobs?q=python&limit=50&start=200&vjk={job_id}"
     }
 
-def extract_jobs(last_page):
+def extract_jobs(last_page, url):
     jobs = []
     for page in range(last_page):
         print(f"Scrapping Indeed page {page + 1}...")
-        result = requests.get(URL+"&start={}".format(page*50))
+        result = requests.get(url+"&start={}".format(page*50))
         soup = BeautifulSoup(result.text, 'html.parser')
         results = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
         for item in results:
@@ -49,8 +46,8 @@ def extract_jobs(last_page):
 
 # stackoverflow
 
-def get_last_page():
-    result = requests.get(URL_2)
+def get_last_page(url_2):
+    result = requests.get(url_2)
     soup = BeautifulSoup(result.text, "html.parser")
     pages = soup.find("div", {"class": "s-pagination"}).find_all("a")
     last_page = pages[-2].get_text(strip=True)
@@ -72,11 +69,11 @@ def extract_so_job(html):
     'apply_link': f"https://stackoverflow.com/jobs/{job_id}"
     }
 
-def extract_so_jobs(last_page):
+def extract_so_jobs(last_page, url_2):
     jobs = []
     for page in range(last_page):
         print(f"Scrapping Stackoverflow page {page + 1}...")
-        result = requests.get(f"{URL_2}&pg={page+1}")
+        result = requests.get(f"{url_2}&pg={page+1}")
         soup = BeautifulSoup(result.text, "html.parser")
         results = soup.find_all("div", {"class": "-job"})
         for result in results:
@@ -94,12 +91,12 @@ def save_to_file(jobs):
         writer.writerow(job.values())
     return
 
-def get_jobs():
-    last_page = extract_pages()
-    indeed_jobs = extract_jobs(last_page)
-    last_page = get_last_page()
-    stack_jobs = extract_so_jobs(last_page)
+def get_jobs(word):
+    url = f"https://kr.indeed.com/%EC%B7%A8%EC%97%85?q={word}&limit=50"
+    url_2 = f"https://stackoverflow.com/jobs?q={word}&sort=i"
+    last_page = extract_pages(url)
+    indeed_jobs = extract_jobs(last_page, url)
+    last_page = get_last_page(url_2)
+    stack_jobs = extract_so_jobs(last_page, url_2)
     jobs = indeed_jobs + stack_jobs
     return jobs
-
-save_to_file(get_jobs())
