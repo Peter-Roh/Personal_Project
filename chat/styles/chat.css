@@ -1,0 +1,36 @@
+#chat__messages {
+    position: absolute;
+    overflow: auto;
+    top: 60px;
+    bottom: 60px;
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+#chat__messages::after {
+    position: fixed;
+    overflow: auto;
+    top: 60px;
+    bottom: 60px;
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+    content: "";
+    background-image: url("./chat_background.png");
+    opacity: 0.3;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30%;
+}
+#chat__messages li {
+    margin: 20px 20px 20px 20px;
+    font-weight: 500;
+    font-size: 18px;
+    width: -webkit-fill-available;
+}
+#chat__messages li span.self span.user {
+    color: rgb(90, 200, 250);
+}
+#chat__messages li span.out span.user {
+    color: rgb(255, 149, 0);
+}

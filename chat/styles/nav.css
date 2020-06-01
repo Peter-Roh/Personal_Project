@@ -1,0 +1,41 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 60px;
+    background: white;
+    border-bottom: 1px solid #E2E2E2;
+    box-shadow: 5px 3px 2px #E2E2E2;
+}
+.nav .left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+}
+.nav .left a {
+    padding-right: 15px;
+}
+.nav .left a:active {
+    transform: scale(0.9);
+}
+
+.nav .left h3 {
+    font-weight: 600;
+    font-size: 18px;
+}
+.nav .middle h3 {
+    font-weight: 600;
+    font-size: 18px;
+}
+.nav .right {
+    padding-right: 10px;
+}
+.nav .right:active {
+    transform: scale(0.9);
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" href="styles.css">
+    <title>Gochin</title>
+</head>
+<body>
+    <div class="nav big title-bold">
+        <div class="left">
+            <a href="#" class="back-btn trash-link">
+                <img src="back_icon.png">
+            </a>
+            <h3>1대1 멘토링</h3>
+        </div>
+        <div class="middle">
+            <h3>채팅방</h3>
+        </div>
+        <div class="right">
+            <a href="#" class="search"><img src="nav_search_icon.png"></a>
+        </div>
+    </div>
+    <ul id="chat__messages">
+    </ul>
+    <div class="modal">
+        <form class="sendMsg" id="chat__send">
+            <span class="plus" id="plus">
+                <img src="chat_plus_icon.png">
+            </span>
+            <input type="text" placeholder="Write a message">
+            <button type="button" class="submit"><img src="icon_enter.png"></button>
+        </form>
+        <div class="modal__window" id="modal__window" style="display: none">
+            <img src="./chat_close_icon.png" class="close" id="modal">
+            <div class="modal__btn"><img src="./clip.png"><div class="modal__title">사진 / 파일 올리기</div></div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/events.js"></script>
+    <script type="module" src="/index.js"></script>
+    <script type="module" src="/main.js"></script>
+</body>
+</html>
